@@ -1,5 +1,6 @@
 import 'package:chat_app/widgets/forgotpassword.dart';
 import 'package:chat_app/widgets/namelist.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'signup.dart';
 class LoginPage extends StatefulWidget {
@@ -8,6 +9,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  var emailTextEditingController = TextEditingController();
+  var passwordTextEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,11 +22,13 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             Text("My Chat app"),
             TextField(
+              controller: emailTextEditingController,
               decoration: InputDecoration(
                 hintText: "Enter your email"
               ),
             ),
             TextField(
+              controller: passwordTextEditingController,
               obscureText: true,
               decoration: InputDecoration(
                   hintText: "Enter your Password"
@@ -31,8 +37,16 @@ class _LoginPageState extends State<LoginPage> {
             FlatButton(
               child: Text("Login"),
               color:Colors.yellow,
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder:(context)=>NameListPage()));
+              onPressed: () async {
+                // Navigator.push(context, MaterialPageRoute(builder:(context)=>NameListPage()));
+                var user = (await _auth.signInWithEmailAndPassword(email:emailTextEditingController.text.toString().trim(),
+                password: passwordTextEditingController.text)).user;
+                if (user != null){
+                  print("Succesfully logged in!");
+                }
+                else {
+                  print("Something is wrong");
+                }
               },
             ),
             FlatButton(

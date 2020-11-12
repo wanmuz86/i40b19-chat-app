@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "957159770572",
+    "firebase_url": "https://chat-app-712b4.firebaseio.com",
+    "project_id": "chat-app-712b4",
+    "storage_bucket": "chat-app-712b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:957159770572:android:ba3bea0c81e8c07de17569",
+        "android_client_info": {
+          "package_name": "my.com.anak2u.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "957159770572-8omf6n3e4dbt6rfpuvifh86j7edngs0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsiCFI3-3F1JeAKbMjKA8mAacuPRezyFA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "957159770572-8omf6n3e4dbt6rfpuvifh86j7edngs0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
