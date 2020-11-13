@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 class SignupPage extends StatefulWidget {
   @override
   _SignupPageState createState() => _SignupPageState();
@@ -38,9 +39,18 @@ class _SignupPageState extends State<SignupPage> {
                 onPressed: () async {
                   var email = emailController.text;
                   var password = passwordController.text;
-                  User user = (await _auth.createUserWithEmailAndPassword(email:email.toString().trim(),password:password)).user;
+                  User user = (await
+                  _auth.createUserWithEmailAndPassword(email:email.toString().trim(),
+                      password:password)).user;
                   if (user != null){
                     print("User succesfully signed up!");
+
+                    FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+                      'email':user.email,
+                      'id':user.uid,
+                      'createdAt':DateTime.now(),
+                      'chattingWith':null
+                    });
                   }
                   else {
                     print("Something is wrong!");

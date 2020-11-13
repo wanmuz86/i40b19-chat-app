@@ -43,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                 password: passwordTextEditingController.text)).user;
                 if (user != null){
                   print("Succesfully logged in!");
+                  Navigator.push(context, MaterialPageRoute(builder:(context)=>NameListPage(currentUserId:user.uid)));
                 }
                 else {
                   print("Something is wrong");
