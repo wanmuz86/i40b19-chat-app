@@ -14,8 +14,15 @@ class _ChatPageState extends State<ChatPage> {
   final userId;
   var chatEditingController = TextEditingController();
  _ChatPageState({this.userId,this.peerId});
+  var groupChatId= '';
   @override
   Widget build(BuildContext context) {
+    if (userId.hashCode <= peerId.hashCode) {
+      groupChatId = '$userId-$peerId';
+    } else {
+      groupChatId = '$peerId-$userId';
+    }
+    print('group chat $groupChatId');
     return Scaffold(
         appBar: AppBar(
           title: Text("Chat"),
@@ -33,12 +40,7 @@ class _ChatPageState extends State<ChatPage> {
                 color: Colors.yellow,
                 onPressed: () {
                   var content = chatEditingController.text;
-                  var groupChatId;
-                  if (userId.hashCode <= peerId.hashCode) {
-                    groupChatId = '$userId-$peerId';
-                  } else {
-                    groupChatId = '$peerId-$userId';
-                  }
+
                   var documentReference =
                   FirebaseFirestore.instance.collection('messages')
                       .doc(groupChatId)
@@ -57,13 +59,30 @@ class _ChatPageState extends State<ChatPage> {
 
             ]),
             Expanded(
-              child: ListView.builder(
-                  itemCount: 0,
-                  itemBuilder: (context, position) {
-                    return ListTile(
-                        title: Text(""),
-                        subtitle: Text(""));
-                  }),
+              child:
+              StreamBuilder(
+                  stream:
+                  FirebaseFirestore.instance.collection('messages')
+                      .doc(groupChatId)
+                      .collection(groupChatId).snapshots(),
+                  builder: (context,snapshots){
+                    if (!snapshots.hasData) {
+                      print('tak dapat');
+                      return CircularProgressIndicator();
+                    }
+                    else
+                      { return
+                      ListView.builder(
+                      itemCount: snapshots.data.documents.length,
+                      itemBuilder:  (context, position) {
+                        return ListTile(
+                        title: Text(snapshots.data.documents[position]["idFrom"]),
+                      subtitle: Text(snapshots.data.documents[position]["content"]));
+                      });
+
+                      }
+                    })
+
             )
           ],
         ));
