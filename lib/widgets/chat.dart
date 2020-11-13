@@ -1,17 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
+  final peerId;
+  final userId;
+  ChatPage({this.userId, this.peerId});
   @override
-  _ChatPageState createState() => _ChatPageState();
+  _ChatPageState createState() => _ChatPageState(userId:this.userId,peerId: this.peerId);
 }
 
 class _ChatPageState extends State<ChatPage> {
-  List messages = [
-    {"from": "Muzaffar", "message": "Hallo", "date": "11/11 20:30"},
-    {"from": "Husna", "message": "Yes nak apa!", "date": "11/11 20:40"},
-    {"from": "Muzaffar", "message": "Jom malan", "date": "11/11 20:41"},
-    {"from": "Muzaffar", "message": "Aku tunggu", "date": "11/11 20:42"}
-  ];
+  final peerId;
+  final userId;
+  var chatEditingController = TextEditingController();
+ _ChatPageState({this.userId,this.peerId});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,23 +25,44 @@ class _ChatPageState extends State<ChatPage> {
             Row(children: [
               Expanded(
                   child: TextField(
+          controller: chatEditingController,
                 decoration: InputDecoration(hintText: "Enter message"),
               )
               ),
               FlatButton(
                 color: Colors.yellow,
-                onPressed: () {},
+                onPressed: () {
+                  var content = chatEditingController.text;
+                  var groupChatId;
+                  if (userId.hashCode <= peerId.hashCode) {
+                    groupChatId = '$userId-$peerId';
+                  } else {
+                    groupChatId = '$peerId-$userId';
+                  }
+                  var documentReference =
+                  FirebaseFirestore.instance.collection('messages')
+                      .doc(groupChatId)
+                      .collection(groupChatId)
+                      .doc(DateTime.now().millisecondsSinceEpoch.toString());
+                 documentReference.set({
+                      'idFrom':this.userId,
+                      'idTo':this.peerId,
+                  'timestamp':DateTime.now().millisecondsSinceEpoch.toString(),
+                  'content':content
+                    });
+                  },
+
                 child: Text("Send"),
               )
 
             ]),
             Expanded(
               child: ListView.builder(
-                  itemCount: messages.length,
+                  itemCount: 0,
                   itemBuilder: (context, position) {
                     return ListTile(
-                        title: Text(messages[position]["from"]),
-                        subtitle: Text(messages[position]["message"]));
+                        title: Text(""),
+                        subtitle: Text(""));
                   }),
             )
           ],

@@ -26,7 +26,7 @@ class _NameListPageState extends State<NameListPage> {
                 return ListView.builder(
                     itemCount: snapshot.data.documents.length,
                     itemBuilder: (context, position) {
-                     if (snapshot.data.documents[position]["uid"] == this.currentUserId) {
+                     if (snapshot.data.documents[position]["id"] == this.currentUserId) {
                        return
                       SizedBox(); }
                      else {
@@ -34,7 +34,9 @@ class _NameListPageState extends State<NameListPage> {
                          onTap: () {
                            Navigator.push(context,
                                MaterialPageRoute(
-                                   builder: (context) => ChatPage()));
+                                   builder: (context) => ChatPage(
+                                     userId: this.currentUserId,
+                                       peerId:snapshot.data.documents[position]["id"])));
                          },
                          title: Text(
                              snapshot.data.documents[position]["email"]),
