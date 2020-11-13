@@ -45,6 +45,8 @@ class _SignupPageState extends State<SignupPage> {
                   if (user != null){
                     print("User succesfully signed up!");
 
+                    // THis is adding a document in a collection
+                    // As is I am adding a row in a table  (users) in GDrive
                     FirebaseFirestore.instance.collection('users').doc(user.uid).set({
                       'email':user.email,
                       'id':user.uid,
